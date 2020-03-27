@@ -134,17 +134,20 @@ public class HealthBridge extends RouteBuilder {
                 .process(exchange -> {
                     Data eventData = exchange.getMessage().getBody(Data.class);
 
+                    Alert alert = new Alert();
+
                     if (eventData.getReport().isAlert()) {
                         exchange.getMessage().setHeader(unsafeHeader, true);
+                        alert.setSeverity("red");
+                    } else {
+                        alert.setSeverity("yellow");
                     }
 
                     String text = String.format("There is a %s incident on %s", eventData.getReport().getMeasurement(),
                         eventData.getReport().getLocation());
 
-                    Alert alert = new Alert();
-
                     alert.setText(text);
-                    alert.setSeverity("yellow");
+                    
 
                     ObjectMapper mapper = new ObjectMapper();
                     String body = mapper.writeValueAsString(alert);
@@ -156,9 +159,9 @@ public class HealthBridge extends RouteBuilder {
                 .wireTap("direct:timeline")
                 .choice()
                     .when(header(unsafeHeader).isEqualTo(true))
-                        .to("sjms2://queue:alarms&ttl={{messaging.ttl.alarms}}")
+                        .to("sjms2://queue:alarms?ttl={{messaging.ttl.alarms}}")
                     .otherwise()
-                        .to("sjms2://queue:notifications&ttl={{messaging.ttl.notifications}}");
+                        .to("sjms2://queue:notifications?ttl={{messaging.ttl.notifications}}");
 
         from("direct:timeline")
                 .log("${body}")
