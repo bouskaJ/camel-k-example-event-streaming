@@ -1,0 +1,3 @@
+sed "s#changeme#$URL#" -i js/index.js
+
+/usr/libexec/s2i/assemble

@@ -1,4 +1,9 @@
 kamel:
+  install:
+    olm: false
+    maven-repositories: 'http://nexus.fuse-qe.eng.rdu2.redhat.com/repository/fuse7-all/'
+    base-image: 'registry-proxy.engineering.redhat.com/rh-osbs/fuse7-fuse-java-openshift:fuse-8.0-openshift-rhel-8-containers-candidate-12026-20200331140212'
+    operator-image: 'quay.io/rh_integration/camel-k:fuse-8.0-openshift-rhel-8-containers-candidate-76998-20200403150707'
   run:
     integration:
       crime-bridge:
