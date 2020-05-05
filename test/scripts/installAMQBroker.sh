@@ -27,7 +27,7 @@ oc wait pod -l ActiveMQArtemis=broker --for condition=Ready --timeout=600s -n ${
 
 waitFor [[ `oc get ActiveMQArtemis broker -o=jsonpath='{.status.podStatus.ready}' -n ${YAKS_NAMESPACE}` !=  "" ]]
 
-sleep 30
+sleep 300
 #install addresses
 oc apply -f "${INFRA}"/messaging/broker/instances/addresses -n ${YAKS_NAMESPACE}
 
